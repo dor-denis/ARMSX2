@@ -24,6 +24,23 @@ platforms/ios/CMakeLists.txt
 - Ninja (`brew install ninja`)
 - A recursive clone with submodules initialized
 
+## GitHub Actions with the iOS 27 SDK
+
+The iOS jobs in `build-all.yml` and `nightly.yml`, and the standalone
+`ios_build.yml` workflow, use GitHub's Apple Silicon `xcode-27` hosted runner.
+The runner preparation step verifies Xcode 27.x and iPhoneOS SDK 27.x and
+installs the Metal compiler component if needed. CMake, Ninja and the Rust
+`aarch64-apple-ios` target are installed before building.
+
+To build only iOS, open **Actions > iOS 27 Build > Run workflow** and select
+the branch to build. Download `armsx2-ios-27-arm64` from the completed run's
+**Artifacts** section. It contains `ARMSX2-iOS-unsigned.ipa` for external
+resigning; no Apple signing secrets are required. Build logs are uploaded as
+`armsx2-ios-27-build-logs`, including when compilation fails.
+
+The runner image tracks Xcode 27 updates, so the SDK can move between 27.x
+minor versions. This does not change the app's minimum iOS version of 17.4.
+
 ## Clone
 
 ```sh

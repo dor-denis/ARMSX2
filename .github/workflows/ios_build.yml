@@ -1,0 +1,50 @@
+name: iOS 27 Build
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ios-27-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ios:
+    name: iOS 27 (arm64, unsigned IPA)
+    runs-on: xcode-27
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: recursive
+
+      - name: Prepare Xcode 27 and iOS SDK
+        run: bash .github/workflows/scripts/macos/prepare-ios-runner.sh
+
+      - name: Install CMake and Ninja
+        run: brew install cmake ninja
+
+      - name: Install Rust iOS target
+        run: rustup target add aarch64-apple-ios
+
+      - name: Build unsigned IPA
+        run: ./platforms/ios/scripts/build-ios-ipa.sh
+
+      - name: Upload unsigned IPA
+        uses: actions/upload-artifact@v7
+        with:
+          name: armsx2-ios-27-arm64
+          path: platforms/ios/build/device/ARMSX2-iOS-unsigned.ipa
+          if-no-files-found: error
+
+      - name: Upload build logs
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: armsx2-ios-27-build-logs
+          path: |
+            platforms/ios/build/device/xcodebuild.log
+            platforms/ios/build/**/CMakeFiles/CMakeConfigureLog.yaml
+          if-no-files-found: ignore

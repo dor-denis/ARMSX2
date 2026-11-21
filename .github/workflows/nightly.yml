@@ -332,11 +332,11 @@ jobs:
     needs: gate
     if: ${{ needs.gate.outputs.proceed == 'true' }}
     continue-on-error: true
-    runs-on: macos-26
+    runs-on: xcode-27
     steps:
       - uses: actions/checkout@v7
-      - name: Select Xcode
-        run: sudo xcode-select -switch /Applications/Xcode.app
+      - name: Prepare Xcode 27 and iOS SDK
+        run: bash .github/workflows/scripts/macos/prepare-ios-runner.sh
 
       # librashader is built by cargo for iOS; without this target CMake turns shader
       # support off and the app hides Shaders, while the build still passes.
@@ -345,8 +345,8 @@ jobs:
 
       # The core is cached by committed content and saved before the client identity is
       # written, so no cache or key holds it.
-      - name: Install Ninja
-        run: brew install ninja
+      - name: Install CMake and Ninja
+        run: brew install cmake ninja
 
       # The runner image is in the key because the precompiled header records the mtime of every
       # SDK header it read, and each macOS image installs the SDK with its own mtimes. A core
