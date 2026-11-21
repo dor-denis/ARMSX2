@@ -1,6 +1,6 @@
-# Unified "build everything on every commit" pipeline for the single-core monorepo.
+# Manual full-platform pipeline for the single-core monorepo.
 #
-# One push to the default branch fans out to every supported target and uploads
+# A workflow dispatch fans out to every supported target and uploads
 # an individual binary artifact per platform:
 #   * PC arm64 Qt GUI  -> macOS, Linux, Windows  (reuses the reusable workflows)
 #   * Android APK       -> platforms/android  (Gradle + NDK, thin CMake on root core)
@@ -22,19 +22,6 @@
 name: Build All Platforms
 
 on:
-  push:
-    branches:
-      - master
-    # Doc-only pushes shouldn't burn ~2h of arm64 CI.
-    paths-ignore:
-      - '**/*.md'
-      - 'LICENSE*'
-      - '.gitignore'
-  pull_request:
-    paths-ignore:
-      - '**/*.md'
-      - 'LICENSE*'
-      - '.gitignore'
   workflow_dispatch:
 
 concurrency:

@@ -32,8 +32,12 @@ The runner preparation step verifies Xcode 27.x and iPhoneOS SDK 27.x and
 installs the Metal compiler component if needed. CMake, Ninja and the Rust
 `aarch64-apple-ios` target are installed before building.
 
-To build only iOS, open **Actions > iOS 27 Build > Run workflow** and select
-the branch to build. Download `armsx2-ios-27-arm64` from the completed run's
+The **iOS 27 Build** workflow runs automatically on pushes to `master` and
+pull requests, excluding documentation-only changes. **Build All Platforms**
+runs only when started manually.
+
+To start an iOS build manually, open **Actions > iOS 27 Build > Run workflow**
+and select the branch to build. Download `armsx2-ios-27-arm64` from the completed run's
 **Artifacts** section. It contains `ARMSX2-iOS-unsigned.ipa` for external
 resigning; no Apple signing secrets are required. Build logs are uploaded as
 `armsx2-ios-27-build-logs`, including when compilation fails.
