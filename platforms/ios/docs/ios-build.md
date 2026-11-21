@@ -26,15 +26,14 @@ platforms/ios/CMakeLists.txt
 
 ## GitHub Actions with the iOS 27 SDK
 
-The iOS jobs in `build-all.yml` and `nightly.yml`, and the standalone
-`ios_build.yml` workflow, use GitHub's Apple Silicon `xcode-27` hosted runner.
+The `ios_build.yml` workflow uses GitHub's Apple Silicon `xcode-27` hosted
+runner. It is the only build workflow in this fork.
 The runner preparation step verifies Xcode 27.x and iPhoneOS SDK 27.x and
 installs the Metal compiler component if needed. CMake, Ninja and the Rust
 `aarch64-apple-ios` target are installed before building.
 
 The **iOS 27 Build** workflow runs automatically on pushes to `master` and
-pull requests, excluding documentation-only changes. **Build All Platforms**
-runs only when started manually.
+pull requests, excluding documentation-only changes.
 
 To start an iOS build manually, open **Actions > iOS 27 Build > Run workflow**
 and select the branch to build. Download `armsx2-ios-27-arm64` from the completed run's
